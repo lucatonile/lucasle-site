@@ -202,17 +202,19 @@ window.addEventListener('resize', () => {
     canvas.height = window.innerHeight;
 });
 
-// Make header video fade and gallery fade in, but leave overlay text alone
+// Make header video fade and gallery fade in, with moving overlay
 (function headerScrollFade() {
     const header = document.querySelector('.site-header');
     const headerMedia = document.querySelector('.header-media');
     const headerClip = document.getElementById('headerClip');
+    const headerOverlay = document.querySelector('.header-overlay');
+    const headerTitle = document.querySelector('.header-title');
     const spacer = document.querySelector('.hero-spacer');
     const gallery = document.querySelector('.gallery');
     if (!header || !headerMedia || !spacer || !gallery) return;
 
-    const fadeStart = 0.01;      // start fading after 25% scroll
-    const fadeEnd = 0.5;        // complete fade by 75% scroll
+    const fadeStart = 0.01;
+    const fadeEnd = 0.5;
 
     let latestY = window.scrollY;
     let ticking = false;
@@ -236,17 +238,30 @@ window.addEventListener('resize', () => {
 
         // normalized scroll progress
         const sc = clamp01(latestY / total);
-
-        // fade progress
         const norm = clamp01((sc - fadeStart) / (fadeEnd - fadeStart));
 
-        // fade header/video out, fade gallery in
+        // fade header/video out
         headerMedia.style.opacity = String(1 - norm);
         if (headerClip) headerClip.style.opacity = String(1 - norm);
 
         // fade gallery in
         gallery.style.opacity = String(norm);
         gallery.style.transform = `translateY(${(1 - norm) * 12}px)`;
+
+        // Move and scale header text
+        if (headerOverlay && headerTitle) {
+            const topPos = 50 - (norm * 42); // from 50% to 8%
+            const fontSize = 96 - (norm * 64); // from 96px to 32px
+            
+            headerOverlay.style.top = `${topPos}%`;
+            headerTitle.style.fontSize = `clamp(24px, ${fontSize}px, 96px)`;
+            
+            // Optional: fade out subtitle
+            const subtitle = headerOverlay.querySelector('.header-sub');
+            if (subtitle) {
+                subtitle.style.opacity = String(1 - norm);
+            }
+        }
     }
 
     document.addEventListener('scroll', onScrollEvent, { passive: true });

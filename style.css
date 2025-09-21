@@ -60,6 +60,7 @@ body {
     align-items: center;
     pointer-events: none;
     z-index: 9999;
+    transition: all 0.4s cubic-bezier(.2,.9,.2,1);
 }
 
 /* remove all other overlay-related styles that might conflict */
@@ -80,6 +81,7 @@ body.header-collapsed .header-overlay {
     font-size: clamp(32px, 9vw, 96px);
     pointer-events: none;
     transform: none; /* remove any transforms */
+    transition: font-size 0.4s cubic-bezier(.2,.9,.2,1);
 }
 
 .header-sub {
