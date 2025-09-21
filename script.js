@@ -89,6 +89,23 @@ analyser.fftSize = 2048;
 const bufferLength = analyser.fftSize;
 const dataArray = new Uint8Array(bufferLength);
 
+// --- Ghost waveform for pre-interaction state ---
+let ghostPhase = 0;
+function generateGhostWaveform(arr) {
+    const freq = 0.004;
+    const amp = 0.6;
+    for (let i = 0; i < arr.length; i++) {
+        const t = i / arr.length;
+        const wave1 = Math.sin(ghostPhase * 1.2 + t * Math.PI * 2 * 2) * amp;
+        const wave2 = Math.sin(ghostPhase * 0.6 + t * Math.PI * 2 * 3) * amp * 0.45;
+        const noise = (Math.sin(ghostPhase * 3 + t * 10) * 0.06);
+        const combined = wave1 + wave2 + noise;
+        arr[i] = Math.max(0, Math.min(255, Math.round((combined + 1) * 128)));
+    }
+    ghostPhase += 0.025 + Math.random() * 0.01;
+}
+
+/* --- Floating Particles continued --- */
 // --- Particles setup ---
 const particles = [];
 const numParticles = 25;
@@ -166,11 +183,7 @@ function animate() {
     carrier.frequency.setValueAtTime(currentFreq + lfo, audioCtx.currentTime);
 
     // --- Draw background ---
-    // ctx.fillStyle = 'rgba(0,0,0,0.03)'; // smaller alpha = less blur
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 
     // --- Draw particles ---
     particles.forEach(p => {
@@ -190,7 +203,13 @@ function animate() {
     });
 
     // --- Draw oscilloscope ---
-    analyser.getByteTimeDomainData(dataArray);
+    // If audio isn't running yet, draw a ghost waveform; otherwise get real audio data
+    if (audioCtx && audioCtx.state === 'running') {
+        analyser.getByteTimeDomainData(dataArray);
+    } else {
+        generateGhostWaveform(dataArray);
+    }
+
     ctx.lineWidth = 2;
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
     gradient.addColorStop(0, '#EAAC59');

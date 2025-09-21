@@ -185,8 +185,9 @@ function animate() {
     idlePhase += 0.01;
     updateFMSynth(idlePhase);
 
-    analyser.getByteTimeDomainData(dataArray);
-    drawOscilloscope(ctx, canvas, analyser, dataArray);
+    // Let drawOscilloscope decide whether to use ghost or real analyser data
+    const useGhost = !audioCtx || audioCtx.state !== 'running';
+    drawOscilloscope(ctx, canvas, analyser, dataArray, useGhost);
 }
 animate();
 
@@ -252,10 +253,10 @@ window.addEventListener('resize', () => {
         if (headerOverlay && headerTitle) {
             const topPos = 50 - (norm * 42); // from 50% to 8%
             const fontSize = 96 - (norm * 64); // from 96px to 32px
-            
+
             headerOverlay.style.top = `${topPos}%`;
             headerTitle.style.fontSize = `clamp(24px, ${fontSize}px, 96px)`;
-            
+
             // Optional: fade out subtitle
             const subtitle = headerOverlay.querySelector('.header-sub');
             if (subtitle) {
@@ -272,4 +273,3 @@ window.addEventListener('resize', () => {
 
     requestAnimationFrame(update);
 })();
-
