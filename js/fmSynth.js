@@ -29,6 +29,7 @@ const scaleFreqs = [
     1661.22, 1760.00, 1864.66, 1975.53, 2093.00, 2217.46,
     2349.32, 2489.02, 2637.02, 2793.83, 2959.96, 3135.96,
     3322.44, 3520.00]
+
 export function snapToScale(freq) {
     let closest = scaleFreqs[0];
     let minDiff = Math.abs(freq - closest);

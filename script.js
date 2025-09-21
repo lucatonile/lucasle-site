@@ -232,3 +232,24 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// ensure header video and overlay are visible when ready
+(function revealHeaderVideo() {
+    const mediaWrap = document.querySelector('.header-media');
+    const vid = document.getElementById('headerClip');
+    if (!mediaWrap || !vid) return;
+
+    function show() {
+        mediaWrap.setAttribute('aria-revealed', 'true');
+        // ensure any inline/fallback styles are visible
+        vid.style.opacity = '1';
+        vid.style.filter = 'none';
+    }
+
+    if (vid.readyState >= 3) { // HAVE_FUTURE_DATA
+        show();
+    } else {
+        vid.addEventListener('canplay', show, { once: true });
+        window.addEventListener('DOMContentLoaded', () => setTimeout(show, 400), { once: true });
+    }
+})();

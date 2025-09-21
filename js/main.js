@@ -75,11 +75,23 @@ document.addEventListener('mousemove', e => {
     lastTime = Date.now();
 });
 
+// add scroll percent state
+let scrollPct = 0;
+function updateScrollPct() {
+    const max = (document.documentElement.scrollHeight - window.innerHeight) || 1;
+    scrollPct = Math.max(0, Math.min(1, window.scrollY / max));
+}
+document.addEventListener('scroll', updateScrollPct, { passive: true });
+updateScrollPct(); // init
+
 // Unlock audio + load reverb
 async function unlockAudio() {
     await audioCtx.resume();
     await loadReverb('audio/ir_hall.wav'); // replace with your IR
     setupFMSynth();
+
+    // reveal oscilloscope canvas (now clickable-safe since pointer-events:none)
+    document.body.classList.add('osc-active');
 
     // remove listeners so this only runs once (prevents multiple connections/starts)
     document.removeEventListener('click', unlockAudio);
@@ -144,10 +156,18 @@ function animate() {
     trail.style.left = trailX + 'px';
     trail.style.top = trailY + 'px';
 
-    // Smooth freq/mod
+    // Smooth freq/mod from mouse targets (existing)
     const smoothing = mouseSpeed > 0 ? 0.08 : 0.02; // faster when moving
     fmState.currentFreq += (fmState.targetFreq - fmState.currentFreq) * smoothing;
     fmState.currentModDepth += (fmState.targetModDepth - fmState.currentModDepth) * smoothing;
+
+    // --- Scroll-driven modulation: nudge the target values toward scroll mapping ---
+    // map scrollPct to additional freq/mod range
+    const scrollFreq = 110 + scrollPct * 400;       // ~110..510 Hz
+    const scrollMod = 50 + scrollPct * 150;        // ~50..200 mod depth
+    const scrollInfluence = 0.06; // how strongly scroll pulls the targets
+    fmState.targetFreq += (scrollFreq - fmState.targetFreq) * scrollInfluence;
+    fmState.targetModDepth += (scrollMod - fmState.targetModDepth) * (scrollInfluence * 0.9);
 
     // Idle decay based on time since last movement (more robust than mouseSpeed alone)
     const timeSinceLast = Date.now() - lastTime;
@@ -166,8 +186,7 @@ function animate() {
     updateFMSynth(idlePhase);
 
     analyser.getByteTimeDomainData(dataArray);
-    // pass mouseDir and mouseSpeed in correct order
-    drawOscilloscope(ctx, canvas, analyser, dataArray, particles, fmState.currentModDepth, mouseDir, mouseSpeed);
+    drawOscilloscope(ctx, canvas, analyser, dataArray);
 }
 animate();
 
@@ -182,3 +201,60 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// Make header video fade and gallery fade in, but leave overlay text alone
+(function headerScrollFade() {
+    const header = document.querySelector('.site-header');
+    const headerMedia = document.querySelector('.header-media');
+    const headerClip = document.getElementById('headerClip');
+    const spacer = document.querySelector('.hero-spacer');
+    const gallery = document.querySelector('.gallery');
+    if (!header || !headerMedia || !spacer || !gallery) return;
+
+    const fadeStart = 0.01;      // start fading after 25% scroll
+    const fadeEnd = 0.5;        // complete fade by 75% scroll
+
+    let latestY = window.scrollY;
+    let ticking = false;
+
+    function onScrollEvent() {
+        latestY = window.scrollY;
+        if (!ticking) {
+            ticking = true;
+            requestAnimationFrame(update);
+        }
+    }
+
+    function clamp01(v) { return Math.max(0, Math.min(1, v)); }
+
+    function update() {
+        ticking = false;
+
+        const headerH = header.offsetHeight || window.innerHeight;
+        const spacerH = spacer.offsetHeight || 0;
+        const total = (headerH + spacerH) || 1;
+
+        // normalized scroll progress
+        const sc = clamp01(latestY / total);
+
+        // fade progress
+        const norm = clamp01((sc - fadeStart) / (fadeEnd - fadeStart));
+
+        // fade header/video out, fade gallery in
+        headerMedia.style.opacity = String(1 - norm);
+        if (headerClip) headerClip.style.opacity = String(1 - norm);
+
+        // fade gallery in
+        gallery.style.opacity = String(norm);
+        gallery.style.transform = `translateY(${(1 - norm) * 12}px)`;
+    }
+
+    document.addEventListener('scroll', onScrollEvent, { passive: true });
+    window.addEventListener('resize', () => {
+        latestY = window.scrollY;
+        if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+
+    requestAnimationFrame(update);
+})();
+
