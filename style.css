@@ -1,0 +1,131 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    background: #EAAC59;
+    color: #fff;
+    font-family: 'Poppins', sans-serif;
+    overflow-x: hidden;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* Header */
+header {
+    text-align: center;
+    margin: 60px 20px 40px;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+p {
+    font-size: 1.2rem;
+}
+
+/* Links */
+.links {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.links a {
+    display: block;
+    width: 90%;
+    margin: 10px auto;
+    padding: 16px 0;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 1.3rem;
+    text-align: center;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.2);
+    color: #fff;
+    transition: 0.3s;
+}
+
+.links a:hover {
+    background: rgba(255, 255, 255, 0.4);
+}
+
+/* Links (wave-links) */
+.wave-links {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+    z-index: 10;
+}
+
+.wave-link {
+    display: inline-block;
+    padding: 12px 22px;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+    text-decoration: none;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+    font-size: 1rem;
+    transition: transform 220ms ease, background 220ms ease;
+    font-family: inherit;
+    /* ensure Poppins is used */
+    will-change: transform;
+}
+
+.wave-link:hover {
+    background: rgba(255, 255, 255, 0.22);
+    transform: translateY(-4px);
+}
+
+/* letter spans inside wave-link for subtle wave animation */
+.wave-link span {
+    display: inline-block;
+    transition: transform 350ms cubic-bezier(.2, .9, .2, 1), color 200ms;
+    transform-origin: center bottom;
+    font-family: inherit;
+}
+
+/* small stagger lift on hover */
+.wave-link:hover span {
+    transform: translateY(-6px);
+}
+
+/* ensure spans have consistent spacing and no odd fallback */
+.wave-link span+span {
+    margin-left: 0.02em;
+}
+
+/* Gallery */
+.gallery {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 20px;
+    padding: 20px;
+    max-width: 900px;
+    width: 100%;
+}
+
+.gallery img {
+    width: 100%;
+    border-radius: 16px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
+    object-fit: cover;
+}
+
+/* Oscilloscope */
+#oscilloscope {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+}

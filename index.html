@@ -1,25 +1,55 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
-  <title>Lucasle</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: 100vh;
-      margin: 0;
-      background-color: #fafafa;
-      color: #333;
-    }
-    h1 {
-      font-size: 2rem;
-    }
-  </style>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Lucas Herrera Portfolio</title>
+  <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
+
 <body>
-  <h1>Hello, welcome to Lucasle!</h1>
+  <!-- Custom Cursor -->
+  <div id="cursor"></div>
+  <div id="trail"></div>
+
+  <canvas id="oscilloscope"></canvas>
+  <!-- Header -->
+  <header>
+    <h1>Lucas Herrera</h1>
+    <p>Music & Visual Artist</p>
+  </header>
+
+  <main>
+    <!-- Gallery -->
+    <section class="gallery">
+      <picture>
+        <source srcset="images/portrait1.webp" type="image/webp">
+        <img src="images/portrait1.jpg" alt="Lucas portrait" loading="lazy">
+      </picture>
+      <picture>
+        <source srcset="images/portrait2.webp" type="image/webp">
+        <img src="images/portrait2.jpg" alt="Lucas portrait" loading="lazy">
+      </picture>
+      <!-- <picture>
+        <source srcset="images/portrait3.webp" type="image/webp">
+        <img src="images/portrait3.jpg" alt="Lucas portrait" loading="lazy">
+      </picture> -->
+    </section>
+  </main>
+
+  <!-- Links -->
+  <section class="wave-links">
+    <a href="https://www.instagram.com/lucasle.music/" target="_blank" class="wave-link">Instagram</a>
+    <a href="https://lucasle.bandcamp.com/" target="_blank" class="wave-link">Bandcamp</a>
+    <a href="https://music.apple.com/us/artist/lucasle/913240938" target="_blank" class="wave-link">Apple Music</a>
+  </section>
+
+
+
+
+  <script type="module" src="js/main.js"></script>
 </body>
+
 </html>
