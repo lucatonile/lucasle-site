@@ -20,7 +20,7 @@
     <!-- full-bleed video background -->
     <div class="header-media">
       <video class="header-clip" id="headerClip" src="images/long.mp4" autoplay muted playsinline loop
-        preload="metadata" poster="images/portrait1.jpg" aria-label="Long portfolio clip">
+        preload="metadata" aria-label="Long portfolio clip">
         Sorry, your browser doesn't support embedded videos.
       </video>
     </div>
@@ -35,27 +35,39 @@
   <div class="hero-spacer" aria-hidden="true"></div>
 
   <main>
-    <section class="wave-links">
-      <a href="https://www.instagram.com/lucasle.music/" target="_blank" class="wave-link">Instagram</a>
-      <a href="https://lucasle.bandcamp.com/" target="_blank" class="wave-link">Bandcamp</a>
-      <a href="https://music.apple.com/us/artist/lucasle/913240938" target="_blank" class="wave-link">Apple Music</a>
+    <section class="about">
+      <!-- <img src="images/portrait1.jpg" alt="Lucas portrait" class="about-img"> -->
+      <div class="about-text">
+        <h2>About Me</h2>
+        <p>I’m Lucas, a Swedish producer and performer with over 15 years of experience in music and audio. I perform
+          live, produce original tracks, and handle mastering, and have created music for brands like Happy Socks.</p>
+      </div>
     </section>
+    <section class="contact">
+
+      <a href="mailto:lucas.k.herrera@gmail.com" class="contact-link">Send me a mail</a>
+    </section>
+
+
     <!-- Gallery: simple two pictures -->
     <section class="gallery">
-      <div class="gallery-item">
+      <a href="https://www.instagram.com/lucasle.music/" target="_blank" class="gallery-item overlay-container">
         <picture>
           <source srcset="images/portrait3.jpeg" type="image/jpeg">
-          <img src="images/portrait1.jpg" alt="Lucas portrait 1" loading="lazy">
+          <img src="images/portrait1.jpg" alt="Instagram" loading="lazy">
         </picture>
-      </div>
+        <div class="overlay-text">Instagram</div>
+      </a>
 
-      <div class="gallery-item">
+      <a href="https://linktr.ee/lucasle" target="_blank" class="gallery-item overlay-container">
         <picture>
           <source srcset="images/portrait2.webp" type="image/webp">
-          <img src="images/portrait2.jpg" alt="Lucas portrait 2" loading="lazy">
+          <img src="images/portrait2.jpg" alt="Linktree" loading="lazy">
         </picture>
-      </div>
+        <div class="overlay-text">Listen</div>
+      </a>
     </section>
+
   </main>
   <script type="module" src="js/main.js"></script>
 </body>

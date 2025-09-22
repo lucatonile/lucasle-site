@@ -73,8 +73,8 @@ export function setupFMSynth() {
     // Wet/dry
     const wetGain = audioCtx.createGain();
     const dryGain = audioCtx.createGain();
-    dryGain.gain.value = 0.5;
-    wetGain.gain.value = 0.5;
+    dryGain.gain.value = 0.1;
+    wetGain.gain.value = 0.1;
 
     // route carrier through wet/dry -> mix -> master gain -> analyser -> destination
     carrier.connect(dryGain);
