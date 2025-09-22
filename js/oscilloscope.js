@@ -1,46 +1,36 @@
 // oscilloscope.js
-export function drawOscilloscope(ctx, canvas, analyser, dataArray, particles, currentModDepth, mouseDir, mouseSpeed) {
-    // Clear canvas for crisp waveform
+// Ghost waveform for pre-interaction state (stronger, more organic)
+let ghostPhase = 0;
+let ghostAmpLFO = 0;
+function generateGhostWaveform(dataArray) {
+    const len = dataArray.length;
+
+    ghostAmpLFO = 0.6 + Math.sin(ghostPhase * 0.08) * 0.4;
+    const verticalBias = Math.sin(ghostPhase * 0.22) * 0; // ignore extra vertical shift
+
+    for (let i = 0; i < len; i++) {
+        const t = i / len;
+        const a = Math.sin(ghostPhase * 1.6 + t * Math.PI * 2 * 1.8) * 1.0;
+        const b = Math.sin(ghostPhase * 0.9 + t * Math.PI * 2 * 3.2) * 0.6;
+        const c = Math.sin(ghostPhase * 2.4 + t * Math.PI * 2 * 5.1) * 0.28;
+        const combined = (a + b + c) * 0.3 * ghostAmpLFO;
+
+        // map -1..1 to 0..255 centered around 128
+        const v = Math.round((combined) * 127 + 128);
+        dataArray[i] = Math.max(0, Math.min(255, v));
+    }
+
+    ghostPhase += 0.035 + (Math.random() * 0.01);
+}
+
+
+export function drawOscilloscope(ctx, canvas, analyser, dataArray, useGhost = false) {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    const t = Date.now() / 1000; // seconds for smooth autonomous motion
+    if (useGhost) generateGhostWaveform(dataArray);
+    else analyser.getByteTimeDomainData(dataArray);
 
-    // // Draw particles
-    // particles.forEach(p => {
-    //     // autonomous sinusoidal drift
-    //     const driftX = Math.cos(p.phase + t * p.baseSpeed) * p.baseAmp;
-    //     const driftY = Math.sin(p.phase + t * (p.baseSpeed * 0.9)) * (p.baseAmp * 0.7);
-
-    //     // subtle mouse influence and random jitter
-    //     const mouseInfluence = Math.min(mouseSpeed, 200) * 0.0012; // very small
-    //     const mouseXPush = (mouseDir || 0) * 0.0008; // tiny directional push
-
-    //     p.x += p.vx * 0.6 + driftX * 0.03 + mouseXPush + (Math.random() - 0.5) * 0.6;
-    //     p.y += p.vy * 0.6 + driftY * 0.03 + (mouseInfluence * (Math.random() - 0.5));
-
-    //     // Wrap edges with padding so particles don't pop abruptly
-    //     const half = p.baseSize * 2;
-    //     if (p.x < -half) p.x = canvas.width + half;
-    //     if (p.x > canvas.width + half) p.x = -half;
-    //     if (p.y < -half) p.y = canvas.height + half;
-    //     if (p.y > canvas.height + half) p.y = -half;
-
-    //     // size wobble / pulse for liveliness
-    //     const wobble = 1 + Math.sin(t * p.wobbleSpeed + p.phase) * p.sizeVariance;
-    //     const size = Math.max(1, p.baseSize * wobble + currentModDepth / 60);
-
-    //     // draw circle with particle color
-    //     const [r, g, b] = p.color || [234, 172, 89];
-    //     ctx.globalAlpha = p.alpha;
-    //     ctx.fillStyle = `rgb(${r},${g},${b})`;
-    //     ctx.beginPath();
-    //     ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
-    //     ctx.fill();
-    //     ctx.globalAlpha = 1;
-    // });
-
-    // Draw waveform
-    analyser.getByteTimeDomainData(dataArray);
+    ctx.save();
     ctx.lineWidth = 2;
 
     const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
@@ -49,16 +39,21 @@ export function drawOscilloscope(ctx, canvas, analyser, dataArray, particles, cu
     gradient.addColorStop(1, '#EAAC59');
     ctx.strokeStyle = gradient;
 
-    ctx.beginPath();
-    const sliceWidth = canvas.width / dataArray.length;
+    const midY = canvas.height / 2;
+    const verticalScale = useGhost ? (canvas.height * 0.15) : (canvas.height / 3);
+    const sliceW = canvas.width / dataArray.length;
     let x = 0;
 
+    ctx.beginPath();
     for (let i = 0; i < dataArray.length; i++) {
-        const v = dataArray[i] / 128.0;  // normalize 0–2
-        const y = v * canvas.height / 2;
+        const v = (dataArray[i] - 128) / 128; // normalize to -1..1
+        const y = midY + v * verticalScale;   // now perfectly centered
         if (i === 0) ctx.moveTo(x, y);
         else ctx.lineTo(x, y);
-        x += sliceWidth;
+        x += sliceW;
     }
+
     ctx.stroke();
+    ctx.restore();
 }
+

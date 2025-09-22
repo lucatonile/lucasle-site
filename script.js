@@ -51,44 +51,6 @@ document.querySelectorAll('.wave-link').forEach(link => {
 
 
 /* --- Floating Particles --- */
-// --- Web Audio Setup ---
-const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-let carrier = audioCtx.createOscillator();
-let modulator = audioCtx.createOscillator();
-let modGain = audioCtx.createGain();
-let gainNode = audioCtx.createGain();
-
-// Connect nodes
-carrier.connect(gainNode).connect(audioCtx.destination);
-modulator.connect(modGain);
-modGain.connect(carrier.frequency);
-
-// Oscillator setup
-carrier.type = 'sine';
-modulator.type = 'sine';
-carrier.frequency.value = 220;
-modulator.frequency.value = 1;
-modGain.gain.value = 0;
-gainNode.gain.value = 0.2;
-
-carrier.start();
-modulator.start();
-
-// --- Canvas setup ---
-const canvas = document.createElement('canvas');
-canvas.id = 'oscilloscope';
-document.body.appendChild(canvas);
-const ctx = canvas.getContext('2d');
-canvas.width = window.innerWidth;
-canvas.height = window.innerHeight;
-
-// --- Oscilloscope setup ---
-const analyser = audioCtx.createAnalyser();
-gainNode.connect(analyser);
-analyser.fftSize = 2048;
-const bufferLength = analyser.fftSize;
-const dataArray = new Uint8Array(bufferLength);
-
 // --- Particles setup ---
 const particles = [];
 const numParticles = 25;
@@ -166,11 +128,7 @@ function animate() {
     carrier.frequency.setValueAtTime(currentFreq + lfo, audioCtx.currentTime);
 
     // --- Draw background ---
-    // ctx.fillStyle = 'rgba(0,0,0,0.03)'; // smaller alpha = less blur
-    // ctx.fillRect(0, 0, canvas.width, canvas.height);
-
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-
 
     // --- Draw particles ---
     particles.forEach(p => {
@@ -188,27 +146,6 @@ function animate() {
         ctx.arc(p.x, p.y, size, 0, Math.PI * 2);
         ctx.fill();
     });
-
-    // --- Draw oscilloscope ---
-    analyser.getByteTimeDomainData(dataArray);
-    ctx.lineWidth = 2;
-    const gradient = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
-    gradient.addColorStop(0, '#EAAC59');
-    gradient.addColorStop(0.5, '#fff');
-    gradient.addColorStop(1, '#EAAC59');
-    ctx.strokeStyle = gradient;
-    ctx.beginPath();
-
-    const sliceWidth = canvas.width / bufferLength;
-    let x = 0;
-    for (let i = 0; i < bufferLength; i++) {
-        const v = dataArray[i] / 128.0;
-        const y = v * canvas.height / 2;
-        if (i === 0) ctx.moveTo(x, y);
-        else ctx.lineTo(x, y);
-        x += sliceWidth;
-    }
-    ctx.stroke();
 }
 animate();
 
@@ -232,3 +169,24 @@ window.addEventListener('resize', () => {
     canvas.width = window.innerWidth;
     canvas.height = window.innerHeight;
 });
+
+// ensure header video and overlay are visible when ready
+(function revealHeaderVideo() {
+    const mediaWrap = document.querySelector('.header-media');
+    const vid = document.getElementById('headerClip');
+    if (!mediaWrap || !vid) return;
+
+    function show() {
+        mediaWrap.setAttribute('aria-revealed', 'true');
+        // ensure any inline/fallback styles are visible
+        vid.style.opacity = '1';
+        vid.style.filter = 'none';
+    }
+
+    if (vid.readyState >= 3) { // HAVE_FUTURE_DATA
+        show();
+    } else {
+        vid.addEventListener('canplay', show, { once: true });
+        window.addEventListener('DOMContentLoaded', () => setTimeout(show, 400), { once: true });
+    }
+})();
