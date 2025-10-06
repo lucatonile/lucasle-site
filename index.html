@@ -6,6 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Lucas Herrera Portfolio</title>
   <link rel="stylesheet" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code&display=swap" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
 </head>
 
@@ -39,22 +40,81 @@
       <!-- <img src="images/portrait1.jpg" alt="Lucas portrait" class="about-img"> -->
       <div class="about-text">
         <h2>About Me</h2>
-        <p>I’m Lucas, a Swedish producer and performer with over 15 years of experience in music and audio. I perform
-          live, produce original tracks, and handle mastering, and have created music for brands like Happy Socks.</p>
+        <p>
+          Swedish electronic music artist and producer Lucas Kristiansson Herrera, recently based in Marseille. I
+          create, record, mix, master, and perform my own music full-time under the alias Lucasle. My live performances
+          are constantly evolving, combining hardware and carefully planned software with improvisation on top of my
+          compositions.</p>
       </div>
     </section>
-    <section class="contact">
 
-      <a href="mailto:lucas.k.herrera@gmail.com" class="contact-link">Send me a mail</a>
+    <h2> Releases</h2>
+    <section class="portfolio-release-wrapper">
+      <div class="portfolio-release">
+        <iframe style="border: 0; width: 350px; height: 350px;"
+          src="https://bandcamp.com/EmbeddedPlayer/album=864158310/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/"
+          seamless><a href="https://lucasle.bandcamp.com/album/nya">Nya by Lucasle</a></iframe>
+      </div>
+
+      <div class="portfolio-release">
+        <iframe style="border: 0; width: 350px; height: 350px;"
+          src="https://bandcamp.com/EmbeddedPlayer/album=3061913607/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/"
+          seamless><a href="https://lucasle.bandcamp.com/album/temporary-collection-ii">Temporary Collection II by
+            Lucasle</a></iframe>
+      </div>
+
+      <div class="portfolio-release">
+        <iframe style="border: 0; width: 350px; height: 350px;"
+          src="https://bandcamp.com/EmbeddedPlayer/album=737037025/size=large/bgcol=ffffff/linkcol=0687f5/minimal=true/transparent=true/"
+          seamless><a href="https://lucasle.bandcamp.com/album/temporary-collection-i">Temporary Collection I by
+            Lucasle</a></iframe>
+      </div>
+
     </section>
+
+    <h2>Live</h2>
+    <section class="portfolio-videos">
+      <div class="portfolio-video-wrapper">
+        <div class="portfolio-video">
+          <div style="padding:177.78% 0 0 0;position:relative;"><iframe
+              src="https://player.vimeo.com/video/1124772980?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              title="Lucasle @ La Base, Marseille (2025)"></iframe></div>
+        </div>
+
+        <div class="portfolio-video">
+          <div style="padding:177.78% 0 0 0;position:relative;"><iframe
+              src="https://player.vimeo.com/video/1124774458?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              title="Lucasle @ Le Jardin des Traverses, Paris (2025)"></iframe></div>
+        </div>
+        <div class="portfolio-video">
+          <div style="padding:177.78% 0 0 0;position:relative;"><iframe
+              src="https://player.vimeo.com/video/1124776509?badge=0&amp;autopause=0&amp;player_id=0&amp;app_id=58479"
+              frameborder="0"
+              allow="autoplay; fullscreen; picture-in-picture; clipboard-write; encrypted-media; web-share"
+              referrerpolicy="strict-origin-when-cross-origin"
+              style="position:absolute;top:0;left:0;width:100%;height:100%;"
+              title="Lucasle @ WoMa, Paris (2025)"></iframe></div>
+        </div>
+      </div>
+    </section>
+
 
 
     <!-- Gallery: simple two pictures -->
+    <h2> Get in touch</h2>
     <section class="gallery">
       <a href="https://www.instagram.com/lucasle.music/" target="_blank" class="gallery-item overlay-container">
         <picture>
-          <source srcset="images/portrait3.jpeg" type="image/jpeg">
-          <img src="images/portrait1.jpg" alt="Instagram" loading="lazy">
+          <source srcset="images/portrait3.jpg" type="image/jpeg">
+          <img src="images/portrait3.jpg" alt="Instagram" loading="lazy">
         </picture>
         <div class="overlay-text">Instagram</div>
       </a>
@@ -66,10 +126,19 @@
         </picture>
         <div class="overlay-text">Listen</div>
       </a>
+
+      <a href="mailto:lucas.k.herrera@gmail.com" target=" _blank" class="gallery-item overlay-container">
+        <picture>
+          <source srcset="images/portrait4.jpg" type="image/webp">
+          <img src="images/portrait4.jpg" alt="✉️" loading="lazy">
+        </picture>
+        <div class="overlay-text">Mail</div>
+      </a>
     </section>
 
   </main>
   <script type="module" src="js/main.js"></script>
+  <script src="https://player.vimeo.com/api/player.js"></script>
 </body>
 
 </html>

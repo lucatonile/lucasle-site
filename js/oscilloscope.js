@@ -24,11 +24,15 @@ function generateGhostWaveform(dataArray) {
 }
 
 
-export function drawOscilloscope(ctx, canvas, analyser, dataArray, useGhost = false) {
+export function drawOscilloscope(ctx, canvas, dataArray = null, useGhost = true) {
+    if (!dataArray) {
+        const bufferLength = 512;
+        dataArray = new Uint8Array(bufferLength);
+    }
+
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-    if (useGhost) generateGhostWaveform(dataArray);
-    else analyser.getByteTimeDomainData(dataArray);
+    generateGhostWaveform(dataArray);
 
     ctx.save();
     ctx.lineWidth = 2;
