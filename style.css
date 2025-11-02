@@ -513,8 +513,7 @@ body.header-collapsed .site-header {
 }
 
 /* Portfolio Videos Section */
-.portfolio-video-wrapper {
-    max-width: 1000px;
+.portfolio-video-wrapper { 
     padding: 0 20px;
     display: flex;
     flex-direction: row;
