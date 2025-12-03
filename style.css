@@ -4,6 +4,12 @@
     box-sizing: border-box;
 }
 
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
 body {
     background: #EAAC59;
     color: #fff;
@@ -513,7 +519,7 @@ body.header-collapsed .site-header {
 }
 
 /* Portfolio Videos Section */
-.portfolio-video-wrapper { 
+.portfolio-video-wrapper {
     padding: 0 20px;
     display: flex;
     flex-direction: row;
@@ -555,6 +561,12 @@ body.header-collapsed .site-header {
     border: 0;
 }
 
+.portfolio-release iframe {
+    width: 100%;
+    max-width: 350px;
+    height: auto;
+}
+
 /* Text info next to video */
 .portfolio-info h3 {
     font-size: clamp(20px, 4vw, 28px);
@@ -588,4 +600,14 @@ body.header-collapsed .site-header {
 
 .portfolio-release {
     padding: 12px;
+}
+
+.content-container {
+    overflow-x: auto;
+}
+
+.content-container>* {
+    flex: 0 0 auto;
+    max-width: 90vw;
+    scroll-snap-align: start;
 }
